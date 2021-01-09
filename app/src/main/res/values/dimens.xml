@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="margin_micro">4dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_default">16dp</dimen>
+    <dimen name="margin_super">48dp</dimen>
+
+    <!--Component Size-->
+    <!--Component Size-->
+
+    <!--Corner-->
+    <dimen name="edit_corner">6dp</dimen>
+    <dimen name="shape_corner">10dp</dimen>
+    <dimen name="button_corner_small">6dp</dimen>
+    <!--Corner-->
+
+    <!--Text Size-->
+    <dimen name="text_size_mini">10sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_normal">14sp</dimen>
+    <dimen name="text_size_default">16sp</dimen>
+    <dimen name="text_size_big">24sp</dimen>
+    <!--Text Size-->
+
+    <dimen name="grid_space">10dp</dimen>
+
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="NavigationView">
+        <attr name="layout" format="reference"/>
+        <attr name="indicator" format="reference"/>
+        <attr name="firstItemSelected" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="FlexibleToolbar">
+        <attr name="iconColor" format="color" />
+        <attr name="homeIconColor" format="color" />
+    </declare-styleable>
+</resources>

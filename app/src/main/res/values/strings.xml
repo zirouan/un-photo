@@ -1,0 +1,13 @@
+<resources>
+    <string name="clear"/>
+    <string name="app_name">Un Photos</string>
+
+    <!--Messages-->
+    <string name="no_internet_signal">Sem sinal de internet</string>
+    <string name="failed_server">Houve uma falha no Servidor</string>
+    <string name="no_server_response">Não houve resposta do servidor</string>
+    <string name="no_data">Ainda não existem informações a serem exibidas</string>
+    <string name="there_was_fail_try_again">Houve uma falha. Tente novamente.</string>
+    <!--Messages-->
+
+</resources>

@@ -1,0 +1,126 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="AppTheme.DarkLight">
+        <!-- Customize your theme here. -->
+        <item name="android:splitMotionEvents">false</item>
+        <item name="android:windowEnableSplitTouch">false</item>
+        <item name="android:spinnerStyle">@style/AppTheme.Spinner</item>
+        <item name="android:dialogTheme">@style/AppTheme.DialogTheme</item>
+        <item name="android:textViewStyle">@style/AppTheme.TextViewStyle</item>
+        <item name="textInputStyle">@style/AppTheme.TextInputLayoutStyle</item>
+        <item name="android:popupMenuStyle">@style/AppTheme.PopupMenuStyle</item>
+        <item name="materialButtonStyle">@style/AppTheme.ButtonStyle.Accent</item>
+        <item name="materialAlertDialogTheme">@style/AppTheme.AlertDialogStyle</item>
+        <item name="android:editTextStyle">@style/AppTheme.TextInputEditTextStyle</item>
+        <item name="android:actionOverflowButtonStyle">@style/AppTheme.PopupMenuOverflow</item>
+    </style>
+
+    <style name="WindowAnimationTransition">
+        <item name="android:windowEnterAnimation">@anim/translate_no_change</item>
+        <item name="android:windowExitAnimation">@anim/translate_no_change</item>
+    </style>
+
+    <!-- Edit theme. -->
+
+    <style name="AppTheme.TextInputEditTextStyle" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="android:lines">1</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">@dimen/text_size_default</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textColorHint">@color/colorTextSecondary</item>
+        <item name="android:paddingLeft">@dimen/margin_default</item>
+        <item name="android:paddingRight">@dimen/margin_default</item>
+    </style>
+
+    <style name="AppTheme.TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintEnabled">true</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/edit_corner</item>
+        <item name="hintTextColor">?attr/colorSecondaryVariant</item>
+        <item name="boxStrokeColor">?attr/colorSecondaryVariant</item>
+        <item name="boxCornerRadiusTopStart">@dimen/edit_corner</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/edit_corner</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/edit_corner</item>
+        <item name="materialThemeOverlay">@style/AppTheme.TextInputEditText.MaterialThemeOverlay</item>
+    </style>
+
+    <style name="AppTheme.TextInputEditText.MaterialThemeOverlay" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox.Dense">
+        <item name="colorControlActivated">?attr/colorAccent</item>
+    </style>
+    <!-- Edit theme. -->
+
+    <!-- TextView theme. -->
+    <style name="AppTheme.TextViewStyle">
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="android:textColor">?attr/colorOnBackground</item>
+    </style>
+
+    <!-- TextView theme. -->
+
+    <!-- Button theme. -->
+    <style name="AppTheme.ButtonStyle.Accent" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="fontFamily">@font/roboto_semi_bold</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="backgroundTint">?attr/colorSecondary</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="rippleColor">?attr/colorSecondaryVariant</item>
+        <item name="cornerRadius">@dimen/button_corner_small</item>
+        <item name="android:paddingEnd" tools:targetApi="jelly_bean_mr1">@dimen/margin_default</item>
+        <item name="android:paddingStart" tools:targetApi="jelly_bean_mr1">@dimen/margin_default</item>
+    </style>
+
+    <!-- Button theme. -->
+
+    <!--TabLayout-->
+    <!--TabLayout-->
+
+    <!-- Toolbar theme. -->
+
+    <!-- Toolbar theme. -->
+
+    <!-- Dialog theme. -->
+    <style name="AppTheme.AlertDialogStyle" parent="Theme.MaterialComponents.DayNight.Dialog.Alert.Bridge">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:colorAccent">?attr/colorAccent</item>
+        <item name="android:windowEnterAnimation">@anim/scale_open</item>
+        <item name="android:windowExitAnimation">@anim/scale_close</item>
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+    </style>
+
+    <style name="AppTheme.DialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+        <item name="android:colorAccent">?attr/colorSecondary</item>
+        <item name="android:windowEnterAnimation">@anim/scale_open</item>
+        <item name="android:windowExitAnimation">@anim/scale_close</item>
+        <item name="dialogCornerRadius">@dimen/shape_corner</item>
+        <item name="android:buttonStyle">@style/AppTheme.ButtonStyle.Accent</item>
+    </style>
+    <!-- Dialog theme. -->
+
+    <!-- Spinner theme. -->
+    <style name="AppTheme.Spinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:overlapAnchor">false</item>
+        <item name="android:spinnerMode">dropdown</item>
+        <item name="android:dropDownVerticalOffset">@dimen/margin_small</item>
+        <item name="android:popupBackground">@drawable/shape_rectangle_rounded_gray</item>
+        <item name="android:background">@drawable/ripple_rectangle_small_rounded_outline_gray</item>
+    </style>
+    <!-- Spinner theme. -->
+
+    <style name="AppTheme.PopupMenuOverflow" parent="@style/Widget.MaterialComponents.PopupMenu.Overflow">
+        <item name="android:src">@drawable/ic_more_vertical</item>
+        <item name="android:dropDownSelector">?attr/listChoiceBackgroundIndicator</item>
+        <item name="android:popupBackground">@drawable/shape_rectangle_rounded_gray</item>
+    </style>
+
+    <style name="AppTheme.PopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:tint">?attr/colorOnBackground</item>
+        <item name="iconTint">?attr/colorOnBackground</item>
+        <item name="android:popupBackground">@drawable/shape_rectangle_rounded_gray</item>
+    </style>
+</resources>

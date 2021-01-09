@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="?backgroundColor">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/photo"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:drawableTop="@drawable/ic_photo"
+        android:drawablePadding="@dimen/margin_micro"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="@string/photo"
+        android:textColor="@drawable/selector_navigation_view_item"
+        android:textSize="@dimen/text_size_mini"
+        app:drawableTint="@drawable/selector_navigation_view_item"
+        app:fontFamily="@font/roboto_semi_bold" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/about"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:drawableTop="@drawable/ic_about"
+        android:drawablePadding="@dimen/margin_micro"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="@string/about"
+        android:textColor="@drawable/selector_navigation_view_item"
+        android:textSize="@dimen/text_size_mini"
+        app:drawableTint="@drawable/selector_navigation_view_item"
+        app:fontFamily="@font/roboto_semi_bold" />
+</LinearLayout>
