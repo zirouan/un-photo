@@ -10,6 +10,7 @@ It was developed in Kotlin with MVVM pattern and using the following libraries:
 - Unit Test
 - ViewModel
 - Navigation
+- Pagination
 - ViewBinding
 - Insert Koin
 - Kotlin Coroutines

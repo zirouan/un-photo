@@ -156,7 +156,7 @@ fun AppCompatImageView?.loadImageRounded(@DrawableRes drawableRes: Int) {
 
 fun AppCompatImageView?.loadImage(
     url: String,
-    @DrawableRes placeholderError: Int = R.drawable.ic_un_splash,
+    @DrawableRes placeholderError: Int = R.drawable.ic_android,
     onFinished: (success: Boolean) -> Unit = {}
 ) {
     this?.let { imageView ->

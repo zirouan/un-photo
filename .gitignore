@@ -41,7 +41,7 @@ local.properties
 # Gradle
 gradle/
 .gradle/
-#api.gradle
+api.gradle
 
 # Eclipse project files
 .classpath

@@ -8,12 +8,18 @@
     <dimen name="margin_super">48dp</dimen>
 
     <!--Component Size-->
+    <dimen name="spinner_height">50dp</dimen>
+    <dimen name="image_size_big">100dp</dimen>
+    <dimen name="edit_text_height">50dp</dimen>
+    <dimen name="image_size_default">40dp</dimen>
+    <dimen name="progress_size_default">24dp</dimen>
     <!--Component Size-->
 
     <!--Corner-->
-    <dimen name="edit_corner">6dp</dimen>
+    <dimen name="edit_corner">10dp</dimen>
     <dimen name="shape_corner">10dp</dimen>
-    <dimen name="button_corner_small">6dp</dimen>
+    <dimen name="button_corner_small">10dp</dimen>
+
     <!--Corner-->
 
     <!--Text Size-->

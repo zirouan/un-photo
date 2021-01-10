@@ -1,7 +1,7 @@
-package com.zirouan.unphoto.screen.splash
+package com.zirouan.unphoto.screen.login
 
 import com.zirouan.unphoto.data.local.PreferencesHelper
 
-class SplashRepository(
+class LoginRepository(
     private val preferencesHelper: PreferencesHelper
-) : SplashContract.Repository
+) : LoginContract.Repository

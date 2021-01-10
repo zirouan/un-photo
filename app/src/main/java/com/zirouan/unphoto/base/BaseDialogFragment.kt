@@ -82,7 +82,7 @@ abstract class BaseDialogFragment<VB: ViewBinding> : DialogFragment(), FragmentC
     //region Local
     private fun initDefaultObservers() {
         viewModel?.redirect?.observe(this, { destination ->
-            val rootFragment = if (destination == R.id.splashFragment) getRootParent() else this
+            val rootFragment = if (destination == R.id.loginFragment) getRootParent() else this
             navigate(destination, TransitionAnimation.FADE, null, true, rootFragment)
         })
         viewModel?.loading?.observe(this, { isLoading ->

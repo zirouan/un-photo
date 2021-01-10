@@ -1,8 +1,6 @@
 package com.zirouan.unphoto.util
 
-import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
-import android.animation.ValueAnimator
+import android.animation.*
 import android.view.View
 import android.view.animation.*
 import android.widget.TextView
@@ -43,7 +41,10 @@ class AnimationUtil {
             animator.start()
         }
 
-        fun incrementPercent(view: View, startCount: Float, endCount: Float, duration: Long = 300) {
+        fun incrementPercent(
+            view: View, startCount: Float, endCount: Float, duration: Long = 300,
+            onAnimationEndCallback: OnAnimationFinishCallback? = null
+        ) {
             val animator = ValueAnimator()
             animator.setObjectValues(startCount, endCount)
             animator.addUpdateListener { animation ->
@@ -55,6 +56,11 @@ class AnimationUtil {
             }
 
             animator.duration = duration
+            animator.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    onAnimationEndCallback?.invoke()
+                }
+            })
             animator.start()
         }
 

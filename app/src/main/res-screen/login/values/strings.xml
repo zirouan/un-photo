@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Texts-->
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <!--Texts-->
+
+    <!--Messages-->
+    <string name="type_your_password">Type your password</string>
+    <string name="type_your_username">Type your username</string>
+    <!--Messages-->
+
+</resources>
