@@ -1,6 +1,7 @@
 ext {
     koin_version = '2.1.5'
     glide_version = '4.11.0'
+    mockk_version = '1.10.0'
     kotlin_version = '1.4.21'
     mockito_version = '3.2.4'
     fragment_version = '1.2.5'
@@ -30,6 +31,7 @@ dependencies {
 
     // Test
     testImplementation 'junit:junit:4.13.1'
+    testImplementation "io.mockk:mockk:$mockk_version"
     testImplementation "org.mockito:mockito-core:$mockito_version"
     testImplementation "org.mockito:mockito-inline:$mockito_inline_version"
     testImplementation "androidx.arch.core:core-testing:$core_testing_version"
@@ -67,7 +69,6 @@ dependencies {
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
 
     // Coroutines
-    testImplementation "io.mockk:mockk:1.10.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_core_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_core_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinx_coroutines_test_version"

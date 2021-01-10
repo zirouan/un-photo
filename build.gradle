@@ -2,8 +2,8 @@
 
 buildscript {
     ext.gradle_version = '4.1.1'
-    ext.kotlin_plugin_version = '1.4.21'
     ext.navigation_version = '2.3.0'
+    ext.kotlin_plugin_version = '1.4.21'
 
     repositories {
         google()
