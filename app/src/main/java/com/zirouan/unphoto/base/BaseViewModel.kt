@@ -47,7 +47,9 @@ abstract class BaseViewModel(
 
                 block.invoke(this)
             } catch (exception: Exception) {
-                handleException(exception)
+                doAtMainThread {
+                    handleException(exception)
+                }
             } finally {
                 mLoading.postValue(false)
             }

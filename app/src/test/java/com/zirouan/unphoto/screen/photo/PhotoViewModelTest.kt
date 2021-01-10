@@ -2,19 +2,21 @@ package com.zirouan.unphoto.screen.photo
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.zirouan.unphoto.util.exception.ExceptionHandlerHelper
 import com.zirouan.unphoto.screen.photo.model.Photo
+import com.zirouan.unphoto.util.exception.ExceptionHandlerHelper
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.Mockito.*
-import org.mockito.MockitoAnnotations
-import org.mockito.junit.MockitoJUnitRunner
 
 
 /**
@@ -22,7 +24,7 @@ import org.mockito.junit.MockitoJUnitRunner
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-@RunWith(MockitoJUnitRunner::class)
+@ExperimentalCoroutinesApi
 class PhotoViewModelTest {
 
     companion object {
@@ -30,78 +32,61 @@ class PhotoViewModelTest {
     }
 
     @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
+    val rule = InstantTaskExecutorRule()
 
-    private lateinit var mViewModel: PhotoContract.ViewModel
+    private val testDispatcher = TestCoroutineDispatcher()
 
-    @Mock
-    private lateinit var mMessageObserver: Observer<String>
+    private var photos: List<Photo> = mockk(relaxed = true)
 
-    @Mock
-    private lateinit var mLoadingObserver: Observer<Boolean>
+    private var viewModel: PhotoContract.ViewModel  = mockk()
+    private var repository: PhotoContract.Repository = mockk()
 
-    @Mock
-    private lateinit var mPhotoObserver: Observer<List<Photo>>
-
-    @Mock
-    private lateinit var mResetObserver: Observer<Unit>
-
-    @Mock
-    private lateinit var mException: ExceptionHandlerHelper
-
-    @Mock
-    private lateinit var mRepository: PhotoContract.Repository
-
-    @Mock
-    private var mPhotos: List<Photo> = emptyList()
+    private var resetObserver: Observer<Unit> = mockk(relaxed = true)
+    private var exception: ExceptionHandlerHelper = mockk(relaxed = true)
+    private var loadingObserver: Observer<Boolean> = mockk(relaxed = true)
+    private var photoObserver: Observer<List<Photo>> = mockk(relaxed = true)
 
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
+        Dispatchers.setMain(testDispatcher)
 
-        mViewModel = PhotoViewModel(mRepository, mException)
+        viewModel = PhotoViewModel(repository, exception)
 
-        mViewModel.reset.observeForever(mResetObserver)
-        mViewModel.photos.observeForever(mPhotoObserver)
-        mViewModel.loading.observeForever(mLoadingObserver)
+        viewModel.reset.observeForever(resetObserver)
+        viewModel.photos.observeForever(photoObserver)
+        viewModel.loading.observeForever(loadingObserver)
     }
 
-    @ExperimentalCoroutinesApi
-    @Test
-    fun fetchPhotos_success() {
-        runBlocking {
-            mViewModel.fetchPhotos(isRefresh = true)
-
-            launch {
-                `when`(mRepository.fetchPhotos(anyInt()))
-                        .thenReturn(mPhotos)
-
-                verify(mResetObserver).onChanged(Unit)
-                verify(mLoadingObserver).onChanged(true)
-
-                 mRepository.fetchPhotos(PAGE)
-                verify(mLoadingObserver).onChanged(false)
-            }
-        }
+    @After
+    fun cleanUp() {
+        Dispatchers.resetMain()
+        testDispatcher.cleanupTestCoroutines()
     }
 
-    @ExperimentalCoroutinesApi
     @Test
-    fun fetchPhotos_error() {
-        runBlocking {
-            mViewModel.fetchPhotos(isRefresh = true)
+    fun `When fetchPhotos is called in the ViewModel, check if you called photos in repository`() {
+        coEvery { repository.fetchPhotos(PAGE) } returns photos
 
-            launch {
-                `when`(mRepository.fetchPhotos(anyInt()))
-                        .thenReturn(null)
-                
-                verify(mResetObserver).onChanged(Unit)
-                verify(mLoadingObserver).onChanged(true)
+        viewModel.fetchPhotos(PAGE, isRefresh = true, isInitData = false)
+        coVerify { repository.fetchPhotos(PAGE) }
+    }
 
-                mRepository.fetchPhotos(PAGE)
-                verifyNoMoreInteractions(mPhotoObserver)
-                verify(mLoadingObserver).onChanged(false)
-            }
+    @Test
+    fun `When fetchPhotos is called it returns a list of photos`() {
+        coEvery { repository.fetchPhotos(PAGE) } returns photos
+
+        viewModel.fetchPhotos(PAGE, isRefresh = true, isInitData = false)
+
+        runBlockingTest {
+            coVerify { resetObserver.onChanged(Unit) }
+
+            repository.fetchPhotos(PAGE)
+
+            coVerify { repository.fetchPhotos(PAGE) }
+
+            coVerify { loadingObserver.onChanged(true) }
+            coVerify { photoObserver.onChanged(photos) }
+            coVerify { loadingObserver.onChanged(false) }
         }
     }
 }

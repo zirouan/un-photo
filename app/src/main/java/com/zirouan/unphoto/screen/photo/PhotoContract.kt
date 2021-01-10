@@ -3,6 +3,7 @@ package com.zirouan.unphoto.screen.photo
 import androidx.lifecycle.LiveData
 import com.zirouan.unphoto.base.BaseContract
 import com.zirouan.unphoto.screen.photo.model.Photo
+import com.zirouan.unphoto.screen.photo.model.PhotoResponse
 
 interface PhotoContract {
 

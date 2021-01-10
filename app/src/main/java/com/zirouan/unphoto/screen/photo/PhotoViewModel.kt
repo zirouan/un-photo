@@ -48,7 +48,9 @@ class PhotoViewModel(
             val response = repository.fetchPhotos(page)
             response?.let {
                 mCurrentPage = page
-                mPhotoList.addAll(it)
+                it.let {photos ->
+                    mPhotoList.addAll(photos)
+                }
                 mPhotos.postValue(it)
             }
         }

@@ -71,7 +71,9 @@ class PhotoFragment : BaseFragment<FragmentPhotoBinding>() {
 
     override fun initObservers() {
         viewModel.photos.observe(this, {
-            mAdapter.addData(it)
+            it?.let {
+                mAdapter.addData(it)
+            }
         })
 
         viewModel.page.observe(this, {
