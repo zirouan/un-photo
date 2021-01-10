@@ -7,7 +7,7 @@ It was developed in Kotlin with MVVM pattern and using the following libraries:
 
 - Retrofit
 - LiveData
-- Unit Test
+- Unit Test (Mockk)
 - ViewModel
 - Navigation
 - Pagination
