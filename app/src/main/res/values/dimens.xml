@@ -5,6 +5,8 @@
     <dimen name="margin_micro">4dp</dimen>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_default">16dp</dimen>
+    <dimen name="margin_big">20dp</dimen>
+    <dimen name="margin_big_x2">40dp</dimen>
     <dimen name="margin_super">48dp</dimen>
 
     <!--Component Size-->

@@ -10,6 +10,7 @@ import com.zirouan.unphoto.util.AnimationUtil
 import com.zirouan.unphoto.util.extension.TransitionAnimation
 import com.zirouan.unphoto.util.extension.hideKeyboard
 import com.zirouan.unphoto.util.extension.navigate
+import com.zirouan.unphoto.util.extension.view.visible
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -18,20 +19,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
     override val module = splashModule
     override val viewModel: LoginViewModel by viewModel()
     override val bindingInflater: (LayoutInflater) -> FragmentLoginBinding =
-        FragmentLoginBinding::inflate
+            FragmentLoginBinding::inflate
 
     //region BaseFragment
     override fun initObservers() {
         viewModel.screenPhotos.observe(this, {
-            AnimationUtil.showView(
-                mBinding.includeField.clField,
-                R.anim.translate_fade_in, 1000
-            )
-            AnimationUtil.incrementPercent(
-                mBinding.guideline,
-                0.55f, 0.5f,
-                600
-            )
+            showScreenPhoto()
         })
     }
 
@@ -48,37 +41,53 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
         activity?.let {
             KeyboardVisibilityEvent.setEventListener(it) { isOpen ->
                 AnimationUtil.incrementPercent(
-                    mBinding.guideline,
-                    if (isOpen) 0.5f else 0.3f,
-                    if (isOpen) 0.3f else 0.5f,
-                    800
+                        mBinding.guideline,
+                        if (isOpen) 0.5f else 0.15f,
+                        if (isOpen) 0.15f else 0.5f,
+                        800
                 )
             }
         }
     }
 
     override fun fetchInitialData() {
-        viewModel.screenPhotos()
+        AnimationUtil.showView(
+                mBinding.includeField.clField,
+                R.anim.translate_fade_in, 1000
+        )
+        AnimationUtil.incrementPercent(
+                mBinding.guideline,
+                0.55f, 0.5f,
+                600
+        )
     }
 
     private fun doLogin() {
         hideKeyboard()
-        showScreenPhoto()
+        viewModel.screenPhotos()
     }
 
-    override fun onLoading(isLoading: Boolean) {}
+    override fun onLoading(isLoading: Boolean) {
+        mBinding.includeField.pbLogin.visible(isLoading)
+
+        mBinding.includeField.btnLogin.isEnabled = !isLoading
+        mBinding.includeField.edtEmail.isEnabled = !isLoading
+        mBinding.includeField.edtPassword.isEnabled = !isLoading
+    }
 
     override fun onError(message: String) {}
     //endregion BaseFragment
 
     //region Local
     private fun showScreenPhoto() {
-        val direction = LoginFragmentDirections.actionLoginHomeFragment()
-        navigate(
-            directions = direction,
-            clearBackStack = true,
-            animation = TransitionAnimation.TRANSLATE_FROM_DOWN
-        )
+        mBinding.includeField.btnLogin.postDelayed({
+            val direction = LoginFragmentDirections.actionLoginHomeFragment()
+            navigate(
+                    directions = direction,
+                    clearBackStack = true,
+                    animation = TransitionAnimation.TRANSLATE_FROM_DOWN
+            )
+        }, 1000)
     }
 
     override fun onAttach(context: Context) {
