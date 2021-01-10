@@ -4,9 +4,23 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.zirouan.unphoto.util.exception.ExceptionHandlerHelper
 import com.zirouan.unphoto.screen.detail.model.Detail
+import com.zirouan.unphoto.screen.photo.PhotoContract
+import com.zirouan.unphoto.screen.photo.PhotoViewModel
+import com.zirouan.unphoto.screen.photo.PhotoViewModelTest
+import com.zirouan.unphoto.screen.photo.model.Photo
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -22,7 +36,7 @@ import org.mockito.junit.MockitoJUnitRunner
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-@RunWith(MockitoJUnitRunner::class)
+@ExperimentalCoroutinesApi
 class DetailViewModelTest {
 
     companion object {
@@ -33,55 +47,59 @@ class DetailViewModelTest {
     }
 
     @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
+    val rule = InstantTaskExecutorRule()
 
-    private lateinit var mViewModel: DetailContract.ViewModel
+    private val testDispatcher = TestCoroutineDispatcher()
 
-    @Mock
-    private lateinit var mLoadingObserver: Observer<Boolean>
+    private var viewModel: DetailContract.ViewModel = mockk()
+    private var repository: DetailContract.Repository = mockk()
 
-    @Mock
-    private lateinit var mPhotoObserver: Observer<String>
+    @MockK(relaxed = true)
+    private var detail = Detail(URL)
 
-    @Mock
-    private lateinit var mException: ExceptionHandlerHelper
-
-    @Mock
-    private lateinit var mRepository: DetailContract.Repository
-
-    @Mock
-    private lateinit var mDetail: Detail
+    private var photoObserver: Observer<String> = mockk(relaxed = true)
+    private var exception: ExceptionHandlerHelper = mockk(relaxed = true)
+    private var loadingObserver: Observer<Boolean> = mockk(relaxed = true)
 
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
+        Dispatchers.setMain(testDispatcher)
 
-        mViewModel = DetailViewModel(mRepository, mException)
+        viewModel = DetailViewModel(repository, exception)
 
-        mViewModel.photo.observeForever(mPhotoObserver)
-        mViewModel.loading.observeForever(mLoadingObserver)
-
+        viewModel.photo.observeForever(photoObserver)
+        viewModel.loading.observeForever(loadingObserver)
     }
 
-    @ExperimentalCoroutinesApi
+    @After
+    fun cleanUp() {
+        Dispatchers.resetMain()
+        testDispatcher.cleanupTestCoroutines()
+    }
+
     @Test
-    fun fetchTrackPhoto_success() {
-        runBlocking {
-            mViewModel.fetchTrackPhoto(PHOTO_ID)
+    fun `When fetchTrackPhoto is called in the ViewModel, check if you called photos in repository`() {
+        coEvery { repository.fetchTrackPhoto(PHOTO_ID) } returns detail
 
-            launch {
-                `when`(mRepository.fetchTrackPhoto(anyString()))
-                    .thenReturn(mDetail)
+        viewModel.fetchTrackPhoto(PHOTO_ID)
+        coVerify { repository.fetchTrackPhoto(PHOTO_ID) }
+    }
 
-                verify(mLoadingObserver).onChanged(true)
+    @Test
+    fun `When fetchTrackPhoto is called it returns a url`() {
+        coEvery { repository.fetchTrackPhoto(PHOTO_ID) } returns detail
 
-                val response = mRepository.fetchTrackPhoto(PHOTO_ID)
-                response?.url?.let {
-                    verify(mPhotoObserver).onChanged(URL)
-                }
+        viewModel.fetchTrackPhoto(PHOTO_ID)
 
-                verify(mLoadingObserver).onChanged(false)
-            }
+        runBlockingTest {
+            coVerify { loadingObserver.onChanged(true) }
+
+            repository.fetchTrackPhoto(PHOTO_ID)
+
+            coVerify { repository.fetchTrackPhoto(PHOTO_ID) }
+
+            coVerify { photoObserver.onChanged(detail.url) }
+            coVerify { loadingObserver.onChanged(false) }
         }
     }
 }
