@@ -75,6 +75,7 @@ abstract class BaseDialogFragment<VB: ViewBinding> : DialogFragment(), FragmentC
 
     override fun onDestroy() {
         super.onDestroy()
+        mViewBinding = null
         onActivityResultCallback = null
     }
     //endregion Fragment
@@ -114,5 +115,4 @@ abstract class BaseDialogFragment<VB: ViewBinding> : DialogFragment(), FragmentC
         return rootParent ?: this
     }
     //endregion Local
-
 }
