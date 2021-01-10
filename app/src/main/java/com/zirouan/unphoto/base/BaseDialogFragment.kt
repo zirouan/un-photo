@@ -38,7 +38,7 @@ abstract class BaseDialogFragment<VB: ViewBinding> : DialogFragment(), FragmentC
 
         super.onCreate(savedInstanceState)
         isCancelable = false
-        initObservers()
+        onInitObserver()
     }
 
     override fun onCreateView(
@@ -62,8 +62,8 @@ abstract class BaseDialogFragment<VB: ViewBinding> : DialogFragment(), FragmentC
         dialog?.window?.setBackgroundDrawableResource(R.drawable.shape_rectangle_rounded_gray)
 
         if (!mIsLayoutCreated) {
-            initView()
-            fetchInitialData()
+            onInitView()
+            onFetchInitial()
             mIsLayoutCreated = true
         }
     }

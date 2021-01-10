@@ -6,10 +6,12 @@ import com.zirouan.unphoto.base.BaseContract
 interface LoginContract {
 
     interface ViewModel : BaseContract.ViewModel {
-        val screenPhotos: LiveData<Unit>
+        val login: LiveData<Unit>
 
-        fun screenPhotos()
+        fun doLogin(email: String, password: String)
     }
 
-    interface Repository
+    interface Repository {
+        suspend fun doLogin(email: String, password: String)
+    }
 }

@@ -4,12 +4,12 @@
     <!--Texts-->
     <string name="login">Login</string>
     <string name="password">Password</string>
-    <string name="username">Username</string>
+    <string name="email">Email</string>
     <!--Texts-->
 
     <!--Messages-->
     <string name="type_your_password">Type your password</string>
-    <string name="type_your_username">Type your username</string>
+    <string name="type_your_email">Type your email</string>
     <!--Messages-->
 
 </resources>

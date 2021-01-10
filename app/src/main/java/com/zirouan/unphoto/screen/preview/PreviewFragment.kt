@@ -23,7 +23,7 @@ class PreviewFragment : BaseFragment<FragmentPreviewBinding>() {
     override val module: Module? = null
     override val viewModel: BaseViewModel? = null
 
-    override fun initView() {
+    override fun onInitView() {
         val like = mArgs.argLike
         AnimationUtil.incrementNumberText(mBinding.txtLike, like, 1000)
         AnimationUtil.heartPulse(mBinding.imgHeart, 500, 10)
@@ -54,13 +54,13 @@ class PreviewFragment : BaseFragment<FragmentPreviewBinding>() {
         this.showStatusBar()
     }
 
-    override fun initObservers() {
+    override fun onInitObserver() {
     }
 
-    override fun fetchInitialData() {
+    override fun onFetchInitial() {
     }
 
-    override fun onLoading(isLoading: Boolean) {
+    override fun onLoading(loading: Boolean) {
     }
 
     override fun onError(message: String) {

@@ -27,7 +27,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     //endregion Fragment
 
     //region BaseFragment
-    override fun initView() {
+    override fun onInitView() {
         val navGraphs = listOf(
             R.navigation.photo_nav_graph,
             R.navigation.about_nav_graph
@@ -44,11 +44,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
     }
 
-    override fun initObservers() {}
+    override fun onInitObserver() {}
 
-    override fun fetchInitialData() {}
+    override fun onFetchInitial() {}
 
-    override fun onLoading(isLoading: Boolean) {}
+    override fun onLoading(loading: Boolean) {}
 
     override fun onError(message: String) {}
     //endregion BaseFragment

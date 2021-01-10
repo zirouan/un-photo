@@ -47,7 +47,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), FragmentCompat {
 
         setHasOptionsMenu(true)
         initDefaultObservers()
-        initObservers()
+        onInitObserver()
     }
 
     override fun onCreateView(
@@ -69,8 +69,8 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), FragmentCompat {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (!mIsLayoutCreated) {
-            initView()
-            fetchInitialData()
+            onInitView()
+            onFetchInitial()
             mIsLayoutCreated = true
         }
     }

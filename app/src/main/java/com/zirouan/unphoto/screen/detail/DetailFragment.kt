@@ -28,7 +28,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
     private var mPhoto: Photo? = null
 
     //region BaseFragment
-    override fun initView() {
+    override fun onInitView() {
         this.setToolbar(mBinding.toolbar)
             .title(R.string.title_detail)
             .displayHome(true)
@@ -55,7 +55,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
         }
     }
 
-    override fun initObservers() {
+    override fun onInitObserver() {
         viewModel.photo.observe(this, { url ->
             val like = mPhoto?.likes ?: run { 0 }
             val direction = DetailFragmentDirections.actionDetailPreviewFragment(like, url)
@@ -63,7 +63,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
         })
     }
 
-    override fun fetchInitialData() {
+    override fun onFetchInitial() {
         mPhoto = mArgs.argPhoto
         mPhoto?.let {
             it.user?.bio?.let { bio ->
@@ -78,7 +78,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
         }
     }
 
-    override fun onLoading(isLoading: Boolean) {
+    override fun onLoading(loading: Boolean) {
     }
 
     override fun onError(message: String) {

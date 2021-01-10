@@ -15,7 +15,7 @@ import java.net.UnknownHostException
 
 class ExceptionHelperImpl(private val context: Context) : ExceptionHelper {
 
-    override fun getErrorMessage(
+    override fun message(
             exception: Throwable,
             readApiMessage: Boolean?,
             defaultMessageRes: Int?

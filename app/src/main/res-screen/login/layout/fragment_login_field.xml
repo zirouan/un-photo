@@ -28,7 +28,7 @@
                 style="@style/AppTheme.TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_text_height"
-                android:hint="@string/username"
+                android:hint="@string/email"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
                 android:textColor="@drawable/selector_edit_text" />

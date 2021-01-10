@@ -35,7 +35,7 @@ class PhotoFragment : BaseFragment<FragmentPhotoBinding>() {
     //endregion RecyclerView
 
     //region BaseFragment
-    override fun initView() {
+    override fun onInitView() {
         (mBinding.appbar.layoutParams as CoordinatorLayout.LayoutParams).behavior =
             ToolbarBehavior(mBinding.toolbar, mBinding.txtTitle, mBinding.imgIcon)
 
@@ -69,7 +69,7 @@ class PhotoFragment : BaseFragment<FragmentPhotoBinding>() {
         this.showNavigationBottom()
     }
 
-    override fun initObservers() {
+    override fun onInitObserver() {
         viewModel.photos.observe(this, {
             it?.let {
                 mAdapter.addData(it)
@@ -87,12 +87,12 @@ class PhotoFragment : BaseFragment<FragmentPhotoBinding>() {
         })
     }
 
-    override fun fetchInitialData() {
+    override fun onFetchInitial() {
         viewModel.fetchPhotos(isRefresh = true)
     }
 
-    override fun onLoading(isLoading: Boolean) {
-        mBinding.swPhoto.isRefreshing = isLoading
+    override fun onLoading(loading: Boolean) {
+        mBinding.swPhoto.isRefreshing = loading
     }
 
     override fun onError(message: String) {

@@ -10,6 +10,7 @@ import com.zirouan.unphoto.util.AnimationUtil
 import com.zirouan.unphoto.util.extension.TransitionAnimation
 import com.zirouan.unphoto.util.extension.hideKeyboard
 import com.zirouan.unphoto.util.extension.navigate
+import com.zirouan.unphoto.util.extension.showToast
 import com.zirouan.unphoto.util.extension.view.visible
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -22,13 +23,13 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
             FragmentLoginBinding::inflate
 
     //region BaseFragment
-    override fun initObservers() {
-        viewModel.screenPhotos.observe(this, {
+    override fun onInitObserver() {
+        viewModel.login.observe(this, {
             showScreenPhoto()
         })
     }
 
-    override fun initView() {
+    override fun onInitView() {
         mBinding.includeField.btnLogin.setOnClickListener { doLogin() }
         mBinding.includeField.edtPassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_GO) {
@@ -50,7 +51,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
         }
     }
 
-    override fun fetchInitialData() {
+    override fun onFetchInitial() {
         AnimationUtil.showView(
                 mBinding.includeField.clField,
                 R.anim.translate_fade_in, 1000
@@ -64,19 +65,22 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
 
     private fun doLogin() {
         hideKeyboard()
-        viewModel.screenPhotos()
+        viewModel.doLogin(mBinding.includeField.edtEmail.text.toString(),
+                mBinding.includeField.edtPassword.text.toString())
     }
 
-    override fun onLoading(isLoading: Boolean) {
-        mBinding.includeField.pbLogin.visible(isLoading)
+    override fun onLoading(loading: Boolean) {
+        mBinding.includeField.pbLogin.visible(loading)
 
-        mBinding.includeField.btnLogin.isEnabled = !isLoading
-        mBinding.includeField.edtEmail.isEnabled = !isLoading
-        mBinding.includeField.edtPassword.isEnabled = !isLoading
+        mBinding.includeField.btnLogin.isEnabled = !loading
+        mBinding.includeField.edtEmail.isEnabled = !loading
+        mBinding.includeField.edtPassword.isEnabled = !loading
     }
 
-    override fun onError(message: String) {}
-    //endregion BaseFragment
+    override fun onError(message: String) {
+        showToast(message)
+
+    }    //endregion BaseFragment
 
     //region Local
     private fun showScreenPhoto() {

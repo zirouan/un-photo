@@ -4,7 +4,7 @@ import com.zirouan.unphoto.util.exception.model.ErrorMessage
 
 interface ExceptionHelper {
 
-    fun getErrorMessage(
+    fun message(
         exception: Throwable,
         readApiMessage: Boolean? = true,
         defaultMessageRes: Int? = null

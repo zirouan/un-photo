@@ -56,27 +56,23 @@ abstract class BaseViewModel(
         }
     }
 
-    suspend fun doAtMainThread(doFunction: () -> Unit) {
+    private suspend fun doAtMainThread(doFunction: () -> Unit) {
         withContext(Dispatchers.Main) {
             doFunction.invoke()
         }
     }
 
     private fun handleException(exception: Exception) {
-        val errorMessage = this.exception.getErrorMessage(exception)
-        callAction(errorMessage)
+        callAction(this.exception.message(exception))
     }
 
     private fun callAction(errorMessage: ErrorMessage?) {
-        // to force user to login
         errorMessage?.let {
             if (errorMessage.code == HttpURLConnection.HTTP_UNAUTHORIZED) {
                 mRedirect.postValue(HttpURLConnection.HTTP_UNAUTHORIZED)
             } else {
                 mMessage.postValue(errorMessage.message)
             }
-        }?:run{
-            mMessage.postValue("Error: Null")
         }
     }
 }

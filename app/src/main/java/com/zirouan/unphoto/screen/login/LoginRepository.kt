@@ -4,4 +4,8 @@ import com.zirouan.unphoto.data.local.PreferencesHelper
 
 class LoginRepository(
     private val preferencesHelper: PreferencesHelper
-) : LoginContract.Repository
+) : LoginContract.Repository {
+
+    override suspend fun doLogin(email: String, password: String) {
+    }
+}

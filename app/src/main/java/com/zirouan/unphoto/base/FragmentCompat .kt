@@ -7,9 +7,9 @@ interface FragmentCompat {
     val module: Module?
     val viewModel: BaseViewModel?
 
-    fun initView()
-    fun initObservers()
-    fun fetchInitialData()
+    fun onInitView()
+    fun onInitObserver()
+    fun onFetchInitial()
     fun onError(message: String)
-    fun onLoading(isLoading: Boolean)
+    fun onLoading(loading: Boolean)
 }

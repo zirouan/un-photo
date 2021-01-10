@@ -23,14 +23,14 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>() {
     //endregion Fragment
 
     //region BaseFragment
-    override fun initView() {
+    override fun onInitView() {
     }
 
-    override fun initObservers() {}
+    override fun onInitObserver() {}
 
-    override fun fetchInitialData() {}
+    override fun onFetchInitial() {}
 
-    override fun onLoading(isLoading: Boolean) {}
+    override fun onLoading(loading: Boolean) {}
 
     override fun onError(message: String) {}
     //endregion BaseFragment
