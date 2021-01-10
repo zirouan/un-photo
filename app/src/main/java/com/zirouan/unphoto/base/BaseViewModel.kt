@@ -5,13 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zirouan.unphoto.util.exception.ExceptionHandlerHelper
+import com.zirouan.unphoto.util.exception.ExceptionHelper
 import com.zirouan.unphoto.util.exception.model.ErrorMessage
 import kotlinx.coroutines.*
 import java.net.HttpURLConnection
 
 abstract class BaseViewModel(
-    private val exceptionHandlerHelper: ExceptionHandlerHelper
+    private val exception: ExceptionHelper
 ) : ViewModel(), BaseContract.ViewModel {
 
     override val loading: LiveData<Boolean>
@@ -63,7 +63,7 @@ abstract class BaseViewModel(
     }
 
     private fun handleException(exception: Exception) {
-        val errorMessage = exceptionHandlerHelper.getErrorMessage(exception)
+        val errorMessage = this.exception.getErrorMessage(exception)
         callAction(errorMessage)
     }
 

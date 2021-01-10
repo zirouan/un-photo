@@ -3,11 +3,11 @@ package com.zirouan.unphoto.screen.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.zirouan.unphoto.base.BaseViewModel
-import com.zirouan.unphoto.util.exception.ExceptionHandlerHelper
+import com.zirouan.unphoto.util.exception.ExceptionHelper
 
 class DetailViewModel(
     private val repository: DetailContract.Repository,
-    exception: ExceptionHandlerHelper
+    exception: ExceptionHelper
 ) : BaseViewModel(exception), DetailContract.ViewModel {
 
     override val photo: LiveData<String>

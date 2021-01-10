@@ -13,7 +13,7 @@ import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-class ExceptionHandlerHelperImpl(private val context: Context) : ExceptionHandlerHelper {
+class ExceptionHelperImpl(private val context: Context) : ExceptionHelper {
 
     override fun getErrorMessage(
             exception: Throwable,

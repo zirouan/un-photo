@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.zirouan.unphoto.base.BaseViewModel
 import com.zirouan.unphoto.screen.photo.model.Photo
-import com.zirouan.unphoto.util.exception.ExceptionHandlerHelper
+import com.zirouan.unphoto.util.exception.ExceptionHelper
 
 class PhotoViewModel(
         private val repository: PhotoContract.Repository,
-        exception: ExceptionHandlerHelper
+        exception: ExceptionHelper
 ) : BaseViewModel(exception), PhotoContract.ViewModel {
 
     override val page: LiveData<Int>

@@ -2,20 +2,14 @@ package com.zirouan.unphoto.screen.detail
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.zirouan.unphoto.util.exception.ExceptionHandlerHelper
+import com.zirouan.unphoto.util.exception.ExceptionHelper
 import com.zirouan.unphoto.screen.detail.model.Detail
-import com.zirouan.unphoto.screen.photo.PhotoContract
-import com.zirouan.unphoto.screen.photo.PhotoViewModel
-import com.zirouan.unphoto.screen.photo.PhotoViewModelTest
-import com.zirouan.unphoto.screen.photo.model.Photo
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
@@ -24,11 +18,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.Mockito.*
-import org.mockito.MockitoAnnotations
-import org.mockito.junit.MockitoJUnitRunner
 
 
 /**
@@ -58,7 +47,7 @@ class DetailViewModelTest {
     private var detail = Detail(URL)
 
     private var photoObserver: Observer<String> = mockk(relaxed = true)
-    private var exception: ExceptionHandlerHelper = mockk(relaxed = true)
+    private var exception: ExceptionHelper = mockk(relaxed = true)
     private var loadingObserver: Observer<Boolean> = mockk(relaxed = true)
 
     @Before
