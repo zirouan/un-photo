@@ -51,9 +51,9 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), FragmentCompat {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         if (mLayoutView == null) {
             mViewBinding = bindingInflater.invoke(inflater)
@@ -170,28 +170,24 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), FragmentCompat {
 
     fun builder() {
         activity?.let {
-            (activity as AppCompatActivity?)?.let { appCompat ->
-                toolBar?.let { toolbar ->
-                    appCompat.setSupportActionBar(toolbar)
-                    appCompat.supportActionBar?.let { actionBar ->
+            val appCompat = (activity as AppCompatActivity?)
+            toolBar.let { toolbar ->
+                appCompat?.setSupportActionBar(toolBar)
+                if (toolBarTitle != -1) {
+                    appCompat?.supportActionBar?.title = if (toolBarTitleText != "")
+                        toolBarTitleText
+                    else
+                        getString(toolBarTitle)
+                }
 
-                        if (toolBarTitle != -1) {
-                            actionBar.title = if (toolBarTitleText != "")
-                                toolBarTitleText
-                            else
-                                getString(toolBarTitle)
-                        }
+                appCompat?.supportActionBar?.setDisplayShowHomeEnabled(displayHome)
+                appCompat?.supportActionBar?.setDisplayHomeAsUpEnabled(displayHome)
+                appCompat?.supportActionBar?.elevation = 0f
 
-                        actionBar.setDisplayShowHomeEnabled(displayHome)
-                        actionBar.setDisplayHomeAsUpEnabled(displayHome)
-                        actionBar.elevation = 0f
+                toolbar?.setTitleTextColor(ContextCompat.getColor(it, toolBarTitleColor))
 
-                        toolbar.setTitleTextColor(ContextCompat.getColor(it, toolBarTitleColor))
-
-                        if (toolBarIcon != -1 && displayHome) {
-                            toolbar.navigationIcon = ContextCompat.getDrawable(it, toolBarIcon)
-                        }
-                    }
+                if (toolBarIcon != -1 && displayHome) {
+                    toolbar?.navigationIcon = ContextCompat.getDrawable(it, toolBarIcon)
                 }
             }
         }
@@ -200,39 +196,35 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), FragmentCompat {
 
     //region StatusBar
     protected fun changeStatusBarColor(color: Int) {
-        activity?.let {
-            if (isAtLeastMarshmallow()) {
-                it.window.statusBarColor = color
-                changeStatusBarIconsColor(color != Color.WHITE)
-            } else if (isAtLeastLollipop()) {
-                it.window.statusBarColor = color
-            }
+        if (isAtLeastMarshmallow()) {
+            activity?.window?.statusBarColor = color
+            changeStatusBarIconsColor(color != Color.WHITE)
+        } else if (isAtLeastLollipop()) {
+            activity?.window?.statusBarColor = color
         }
     }
 
     private fun changeStatusBarIconsColor(toWhite: Boolean) {
-        activity?.let {
-            if (isAtLeastR()) {
-                if (toWhite) {
-                    it.window.insetsController?.setSystemBarsAppearance(
+        if (isAtLeastR()) {
+            if (toWhite) {
+                activity?.window?.insetsController?.setSystemBarsAppearance(
                         0,
                         WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-                    )
-                } else {
-                    it.window.insetsController?.setSystemBarsAppearance(
+                )
+            } else {
+                activity?.window?.insetsController?.setSystemBarsAppearance(
                         WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
                         WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-                    )
-                }
-            } else {
-                @Suppress("DEPRECATION")
-                it.window.decorView.systemUiVisibility = if (
+                )
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            activity?.window?.decorView?.systemUiVisibility = if (
                     toWhite || Build.VERSION.SDK_INT < Build.VERSION_CODES.M
-                ) {
-                    0
-                } else {
-                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                }
+            ) {
+                0
+            } else {
+                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             }
         }
     }
@@ -243,8 +235,8 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), FragmentCompat {
             activity?.window?.insetsController?.hide(WindowInsets.Type.statusBars())
         } else {
             activity?.window?.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
     }
@@ -255,7 +247,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), FragmentCompat {
             activity?.window?.insetsController?.show(WindowInsets.Type.statusBars())
         } else {
             activity?.window?.clearFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
     }
