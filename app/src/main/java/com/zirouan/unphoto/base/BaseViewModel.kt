@@ -11,7 +11,7 @@ import kotlinx.coroutines.*
 import java.net.HttpURLConnection
 
 abstract class BaseViewModel(
-    private val exception: ExceptionHelper
+        private val exception: ExceptionHelper
 ) : ViewModel(), BaseContract.ViewModel {
 
     override val loading: LiveData<Boolean>
@@ -23,14 +23,14 @@ abstract class BaseViewModel(
     val redirect: LiveData<Int>
         get() = mRedirect
 
-    private val mLoading = MutableLiveData<Boolean>()
     private val mMessage = MutableLiveData<String>()
+    private val mLoading = MutableLiveData<Boolean>()
     private val mRedirect = MutableLiveData<@IdRes Int>()
 
     protected fun defaultLaunch(
-        validatorHelper: BaseValidatorHelper? = null,
-        vararg any: Any?,
-        block: suspend CoroutineScope.() -> Unit
+            validatorHelper: BaseValidatorHelper? = null,
+            vararg any: Any?,
+            block: suspend CoroutineScope.() -> Unit
     ) {
         viewModelScope.launch {
             try {
@@ -63,15 +63,15 @@ abstract class BaseViewModel(
     }
 
     private fun handleException(exception: Exception) {
-        callAction(this.exception.message(exception))
-    }
+        val error = this.exception.message(exception)
 
-    private fun callAction(errorMessage: ErrorMessage?) {
-        errorMessage?.let {
-            if (errorMessage.code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+        when (error.code) {
+            HttpURLConnection.HTTP_UNAUTHORIZED -> {
                 mRedirect.postValue(HttpURLConnection.HTTP_UNAUTHORIZED)
-            } else {
-                mMessage.postValue(errorMessage.message)
+            }
+
+            else -> {
+                mMessage.postValue(error.message)
             }
         }
     }

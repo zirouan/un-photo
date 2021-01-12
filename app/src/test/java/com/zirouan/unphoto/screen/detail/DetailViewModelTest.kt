@@ -46,8 +46,8 @@ class DetailViewModelTest {
     @MockK(relaxed = true)
     private var detail = Detail(URL)
 
-    private var photoObserver: Observer<String> = mockk(relaxed = true)
     private var exception: ExceptionHelper = mockk(relaxed = true)
+    private var photoObserver: Observer<String> = mockk(relaxed = true)
     private var loadingObserver: Observer<Boolean> = mockk(relaxed = true)
 
     @Before

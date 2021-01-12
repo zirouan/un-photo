@@ -14,16 +14,14 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.View
-import android.widget.AdapterView
-import android.widget.Spinner
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -36,6 +34,7 @@ import com.zirouan.unphoto.R
 import com.zirouan.unphoto.util.DateUtil
 import com.zirouan.unphoto.util.OnSpinnerItemSelectedListener
 import java.text.NumberFormat
+
 
 //region Context
 fun Context.toastShort(text: CharSequence) = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
@@ -52,10 +51,10 @@ fun View?.color(@ColorRes resIdFrom: Int, @ColorRes resIdTo: Int) {
     this?.let {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val anim =
-                ValueAnimator.ofArgb(
-                    ContextCompat.getColor(context, resIdFrom),
-                    ContextCompat.getColor(context, resIdTo)
-                )
+                    ValueAnimator.ofArgb(
+                            ContextCompat.getColor(context, resIdFrom),
+                            ContextCompat.getColor(context, resIdTo)
+                    )
 
             anim.addUpdateListener { animation ->
                 setBackgroundColor(animation.animatedValue as Int)
@@ -73,15 +72,40 @@ fun View?.color(@ColorRes resId: Int) {
     }
 }
 
-fun View?.backgroundDrawableColor(@ColorRes resId: Int) {
+fun ImageView?.tint(@ColorRes resId: Int) {
     this?.let {
-        val background = it.background
-        background?.mutate()
-        background?.colorFilter = PorterDuffColorFilter(
-            ContextCompat.getColor(context, resId),
-            PorterDuff.Mode.SRC_ATOP
-        )
-        it.background = background
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val wrappedDrawable = DrawableCompat.wrap(drawable)
+            DrawableCompat.setTint(wrappedDrawable,
+                    ContextCompat.getColor(context, resId))
+        } else {
+            colorFilter = PorterDuffColorFilter(
+                    ContextCompat.getColor(context, resId),
+                    PorterDuff.Mode.SRC_ATOP)
+        }
+    }
+}
+
+fun ImageView?.tint(@ColorRes resIdFrom: Int, @ColorRes resIdTo: Int) {
+    this?.let {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val wrappedDrawable = DrawableCompat.wrap(drawable)
+            val anim =
+                    ValueAnimator.ofArgb(
+                            ContextCompat.getColor(context, resIdFrom),
+                            ContextCompat.getColor(context, resIdTo)
+                    )
+
+            anim.addUpdateListener { animation ->
+                wrappedDrawable?.let {
+                    DrawableCompat.setTint(wrappedDrawable, animation.animatedValue as Int)
+                }
+            }
+            anim.duration = 3000
+            anim.start()
+        } else {
+            tint(resIdTo)
+        }
     }
 }
 //endregion View
@@ -94,7 +118,7 @@ fun AppCompatTextView?.setCurrency(value: Double?) {
 fun AppCompatTextView?.setDate(@StringRes formatRes: Int, date: String?) {
     this?.text = date?.let {
         val formattedDate = DateUtil.formatDate(
-            it, DateUtil.DATE_TIME_FORMAT_API, DateUtil.DATE_FORMAT_LOCAL
+                it, DateUtil.DATE_TIME_FORMAT_API, DateUtil.DATE_FORMAT_LOCAL
         )
 
         this?.context?.resources?.getString(formatRes, formattedDate)
@@ -119,16 +143,16 @@ fun AppCompatImageView?.loadImage(urlImage: String?) {
         val url = urlImage ?: ""
 
         Glide.with(this.context)
-            .load(url)
-            .into(this)
+                .load(url)
+                .into(this)
     }
 }
 
 fun AppCompatImageView?.loadImage(@DrawableRes drawableRes: Int) {
     this?.let {
         Glide.with(this.context)
-            .load(drawableRes)
-            .into(this)
+                .load(drawableRes)
+                .into(this)
     }
 }
 
@@ -137,9 +161,9 @@ fun AppCompatImageView?.loadImageRounded(urlImage: String?) {
         val url = urlImage ?: ""
 
         Glide.with(it.context).load(url).apply(
-            RequestOptions.circleCropTransform()
-                .centerCrop()
-                .optionalCircleCrop()
+                RequestOptions.circleCropTransform()
+                        .centerCrop()
+                        .optionalCircleCrop()
         ).into(it)
     }
 }
@@ -147,36 +171,36 @@ fun AppCompatImageView?.loadImageRounded(urlImage: String?) {
 fun AppCompatImageView?.loadImageRounded(@DrawableRes drawableRes: Int) {
     this?.let {
         Glide.with(it.context).load(drawableRes).apply(
-            RequestOptions.circleCropTransform()
-                .centerCrop()
-                .optionalCircleCrop()
+                RequestOptions.circleCropTransform()
+                        .centerCrop()
+                        .optionalCircleCrop()
         ).into(it)
     }
 }
 
 fun AppCompatImageView?.loadImage(
-    url: String,
-    @DrawableRes placeholderError: Int = R.drawable.ic_android,
-    onFinished: (success: Boolean) -> Unit = {}
+        url: String,
+        @DrawableRes placeholderError: Int = R.drawable.ic_android,
+        onFinished: (success: Boolean) -> Unit = {}
 ) {
     this?.let { imageView ->
         val listener = object : RequestListener<Drawable> {
             override fun onLoadFailed(
-                e: GlideException?,
-                model: Any?,
-                target: Target<Drawable>?,
-                isFirstResource: Boolean
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
             ): Boolean {
                 onFinished(false)
                 return false
             }
 
             override fun onResourceReady(
-                resource: Drawable?,
-                model: Any?,
-                target: Target<Drawable>?,
-                dataSource: DataSource?,
-                isFirstResource: Boolean
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
             ): Boolean {
                 onFinished(false)
                 return false
@@ -184,43 +208,43 @@ fun AppCompatImageView?.loadImage(
         }
 
         Glide.with(imageView.context)
-            .load(url)
-            .apply(
-                RequestOptions
-                    .bitmapTransform(RoundedCorners(24))
-                    .error(placeholderError)
-                    .centerCrop()
-            )
-            .listener(listener)
-            .into(imageView)
+                .load(url)
+                .apply(
+                        RequestOptions
+                                .bitmapTransform(RoundedCorners(24))
+                                .error(placeholderError)
+                                .centerCrop()
+                )
+                .listener(listener)
+                .into(imageView)
     }
 }
 
 fun AppCompatImageView?.loadImageRounded(
-    urlImage: String?,
-    @DrawableRes placeholderError: Int,
-    onLoadingFinished: (success: Boolean) -> Unit = {}
+        urlImage: String?,
+        @DrawableRes placeholderError: Int,
+        onLoadingFinished: (success: Boolean) -> Unit = {}
 ) {
     this?.let {
         val url = urlImage ?: ""
 
         val requestListener = object : RequestListener<Drawable> {
             override fun onLoadFailed(
-                e: GlideException?,
-                model: Any?,
-                target: Target<Drawable>?,
-                isFirstResource: Boolean
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
             ): Boolean {
                 onLoadingFinished(false)
                 return false
             }
 
             override fun onResourceReady(
-                resource: Drawable?,
-                model: Any?,
-                target: Target<Drawable>?,
-                dataSource: DataSource?,
-                isFirstResource: Boolean
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
             ): Boolean {
                 onLoadingFinished(true)
                 return false
@@ -228,15 +252,15 @@ fun AppCompatImageView?.loadImageRounded(
         }
 
         Glide.with(it.context)
-            .load(url)
-            .apply(
-                RequestOptions.circleCropTransform()
-                    .centerCrop()
-                    .optionalCircleCrop()
-                    .error(placeholderError)
-            )
-            .listener(requestListener)
-            .into(it)
+                .load(url)
+                .apply(
+                        RequestOptions.circleCropTransform()
+                                .centerCrop()
+                                .optionalCircleCrop()
+                                .error(placeholderError)
+                )
+                .listener(requestListener)
+                .into(it)
     }
 }
 //endregion ImageView
@@ -259,13 +283,13 @@ fun TextView.colorSpan(resText: String, start: Int, end: Int, color: Int = Color
     val span = SpannableStringBuilder(resText)
 
     span.setSpan(
-        ForegroundColorSpan(color), start, end,
-        Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            ForegroundColorSpan(color), start, end,
+            Spannable.SPAN_INCLUSIVE_INCLUSIVE
     )
 
     span.setSpan(
-        StyleSpan(Typeface.BOLD), start, end,
-        Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            StyleSpan(Typeface.BOLD), start, end,
+            Spannable.SPAN_INCLUSIVE_INCLUSIVE
     )
 
     text = span
@@ -277,8 +301,8 @@ fun RecyclerView?.enableVerticalIndicators() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val indicators = View.SCROLL_INDICATOR_TOP or View.SCROLL_INDICATOR_BOTTOM
             recyclerView.setScrollIndicators(
-                indicators,
-                View.SCROLL_INDICATOR_TOP or View.SCROLL_INDICATOR_BOTTOM
+                    indicators,
+                    View.SCROLL_INDICATOR_TOP or View.SCROLL_INDICATOR_BOTTOM
             )
         }
     }

@@ -11,13 +11,15 @@ import com.zirouan.unphoto.util.extension.TransitionAnimation
 import com.zirouan.unphoto.util.extension.hideKeyboard
 import com.zirouan.unphoto.util.extension.navigate
 import com.zirouan.unphoto.util.extension.showToast
+import com.zirouan.unphoto.util.extension.view.color
+import com.zirouan.unphoto.util.extension.view.tint
 import com.zirouan.unphoto.util.extension.view.visible
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : BaseFragment<FragmentLoginBinding>() {
 
-    override val module = splashModule
+    override val module = loginModule
     override val viewModel: LoginViewModel by viewModel()
     override val bindingInflater: (LayoutInflater) -> FragmentLoginBinding =
             FragmentLoginBinding::inflate
@@ -65,6 +67,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
 
     private fun doLogin() {
         hideKeyboard()
+        mBinding.imgLogo.tint(android.R.color.holo_red_dark)
         viewModel.doLogin(mBinding.includeField.edtEmail.text.toString(),
                 mBinding.includeField.edtPassword.text.toString())
     }

@@ -22,7 +22,7 @@ class ExceptionHelperImpl(private val context: Context) : ExceptionHelper {
     ): ErrorMessage {
         val errorMessage = when (exception) {
             is HttpException ->
-                getHttpErrorMessage(exception, readApiMessage)
+                httpErrorMessage(exception, readApiMessage)
             is UnknownHostException ->
                 ErrorMessage(
                         context.getString(R.string.no_internet_signal)
@@ -45,7 +45,7 @@ class ExceptionHelperImpl(private val context: Context) : ExceptionHelper {
         )
     }
 
-    private fun getHttpErrorMessage(exception: HttpException, readApiMessage: Boolean?): ErrorMessage? {
+    private fun httpErrorMessage(exception: HttpException, readApiMessage: Boolean?): ErrorMessage? {
         if (readApiMessage == true) {
             try {
                 exception.response()?.errorBody()?.let {
@@ -98,8 +98,6 @@ class ExceptionHelperImpl(private val context: Context) : ExceptionHelper {
             }
             else -> return null
         }
-
-
     }
 
     private fun convertStreamToString(inputStream: InputStream): String {

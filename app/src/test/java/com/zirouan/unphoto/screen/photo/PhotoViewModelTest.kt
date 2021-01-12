@@ -41,8 +41,8 @@ class PhotoViewModelTest {
     private var viewModel: PhotoContract.ViewModel  = mockk()
     private var repository: PhotoContract.Repository = mockk()
 
-    private var resetObserver: Observer<Unit> = mockk(relaxed = true)
     private var exception: ExceptionHelper = mockk(relaxed = true)
+    private var resetObserver: Observer<Unit> = mockk(relaxed = true)
     private var loadingObserver: Observer<Boolean> = mockk(relaxed = true)
     private var photoObserver: Observer<List<Photo>> = mockk(relaxed = true)
 
