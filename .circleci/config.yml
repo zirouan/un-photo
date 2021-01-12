@@ -1,127 +1,34 @@
 version: 2
-
-workflows:
-  version: 2
-  default:
-    jobs:
-      - primary:
-          filters:
-            tags:
-              only: /.*/
-            branches:
-              only: /.*/
-      - release:
-          filters:
-            tags:
-              only: /.*/
-            branches:
-              ignore: /.*/
-# ------------------------------------------------------------------------------
 jobs:
-  primary:
-    docker:
-      - image: mbgl/android-ndk-r21:769c31f1d8
+  build:
     working_directory: ~/code
+    docker:
+      - image: circleci/android:api-25-alpha
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     environment:
       JVM_OPTS: -Xmx3200m
-      BUILDTYPE: Debug
-      IS_LOCAL_DEVELOPMENT: false
-      GRADLE_OPTS: -Xmx4096m -Dorg.gradle.daemon=false -Dkotlin.compiler.execution.strategy=in-process
     steps:
       - checkout
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "MapboxAndroidDemo/build.gradle" }}
-      - run:
-          name: Clean gradle
-          command: ./gradlew clean
-      - run:
-          name: Add preferences to gradle.properties file
-          command: |
-            echo "android.useAndroidX=true" >> gradle.properties
-            echo "android.enableJetifier=true" >> gradle.properties
-            echo "org.gradle.jvmargs=-Xmx4608m" >> gradle.properties
-            echo "android.enableR8=false" >> gradle.properties
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      #      - run:
+      #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
+      #         command: sudo chmod +x ./gradlew
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
       - save_cache:
           paths:
             - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "MapboxAndroidDemo/build.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
-          name: Create google-services.json file
-          shell: /bin/bash -euo pipefail
-          command: |
-            if [ -n "${GOOGLE_SERVICES_JSON_RELEASE}" ]; then
-              echo "${GOOGLE_SERVICES_JSON_RELEASE}" > MapboxAndroidDemo/google-services.json
-            fi
-      - run:
-          name: Add Fabric keys to fabric.properties file
-          command: |
-            if [ -n "${FABRIC_API_SECRET}" && -n "${FABRIC_API_KEY}" ]; then
-              echo "${FABRIC_API_SECRET}" >> MapboxAndroidDemo/fabric.properties
-              echo "${FABRIC_API_KEY}" >> MapboxAndroidDemo/fabric.properties
-            fi
-      - run:
-          name: Log in to Google Cloud Platform
-          shell: /bin/bash -euo pipefail
-          command: |
-            echo "${GCLOUD_SERVICE_ACCOUNT_JSON}" > secret.json
-            gcloud auth activate-service-account --key-file secret.json --project mapbox-android-demo
-            rm secret.json
-      - run:
-          name: Check code style
-          command: make checkstyle
-      - run:
-          name: Generate Espresso sanity tests
-          command: make sanity-test-example-activities
-      - run:
-          name: Run Firebase instrumentation tests
-          command: |
-            #!/bin/bash
-            ./gradlew :MapboxAndroidDemo:assembleglobalDebug --continue
-            ./gradlew :MapboxAndroidDemo:assembleAndroidTest --continue
-            gcloud firebase test android run \
-            --type instrumentation \
-            --app MapboxAndroidDemo/build/outputs/apk/global/debug/MapboxAndroidDemo-global-debug.apk \
-            --test MapboxAndroidDemo/build/outputs/apk/androidTest/global/debug/MapboxAndroidDemo-global-debug-androidTest.apk \
-            --device-ids sailfish --os-version-ids 26 --locales en --orientations portrait --timeout 5m
-      - store_artifacts:
-          path: MapboxAndroidDemo/build/outputs/apk/global/debug/MapboxAndroidDemo-global-debug.apk
-  # ------------------------------------------------------------------------------
-  release:
-    docker:
-      - image: mbgl/android-ndk-r21:769c31f1d8
-    working_directory: ~/code
-    environment:
-      JVM_OPTS: -Xmx3200m
-      BUILDTYPE: Debug
-      IS_LOCAL_DEVELOPMENT: false
-      GRADLE_OPTS: -Xmx4096m -Dorg.gradle.daemon=false -Dkotlin.compiler.execution.strategy=in-process
-    steps:
-      - checkout
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "MapboxAndroidDemo/build.gradle" }}
-      - run:
-          name: Download Dependencies
-          command: ./gradlew androidDependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "MapboxAndroidDemo/build.gradle" }}
-      - run:
-          name: Export developer-config.xml & Google Play authentication json
-          command: |
-            #!/bin/bash
-            echo "${PLAY_PUBLISH_AUTH_JSON}" > android-gl-native-6d21dd280e7b.json
-      - run:
-          name: Create google-services.json file
-          shell: /bin/bash -euo pipefail
-          command: |
-            if [ -n "${GOOGLE_SERVICES_JSON_RELEASE}" ]; then
-              echo "${GOOGLE_SERVICES_JSON_RELEASE}" > MapboxAndroidDemo/google-services.json
-            fi
-      - run:
-          name: Release to Google Play
-          command: ./gradlew publishGlobalRelease
-# ------------------------------------------------------------------------------
+          name: Run Tests
+          command: ./gradlew lint test
+      - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
+          path: app/build/reports
+          destination: reports
+      - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+          path: app/build/test-results
+      # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
