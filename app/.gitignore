@@ -39,7 +39,6 @@ local.properties
 *.iml
 
 # Gradle
-gradle/
 .gradle/
 #api.gradle
 
