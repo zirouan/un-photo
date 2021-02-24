@@ -6,12 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zirouan.unphoto.util.exception.ExceptionHelper
-import com.zirouan.unphoto.util.exception.model.ErrorMessage
 import kotlinx.coroutines.*
 import java.net.HttpURLConnection
 
 abstract class BaseViewModel(
-        private val exception: ExceptionHelper
+    private val exception: ExceptionHelper
 ) : ViewModel(), BaseContract.ViewModel {
 
     override val loading: LiveData<Boolean>
@@ -28,9 +27,9 @@ abstract class BaseViewModel(
     private val mRedirect = MutableLiveData<@IdRes Int>()
 
     protected fun defaultLaunch(
-            validatorHelper: BaseValidatorHelper? = null,
-            vararg any: Any?,
-            block: suspend CoroutineScope.() -> Unit
+        validatorHelper: BaseValidatorHelper? = null,
+        vararg any: Any?,
+        block: suspend CoroutineScope.() -> Unit
     ) {
         viewModelScope.launch {
             try {
@@ -38,9 +37,9 @@ abstract class BaseViewModel(
 
                 validatorHelper?.let {
                     val validation = validatorHelper.validate(*any)
-                    if (validation != null) {
+                    validation?.let { message ->
                         mLoading.postValue(false)
-                        mMessage.postValue(validation)
+                        mMessage.postValue(message)
                         return@launch
                     }
                 }
