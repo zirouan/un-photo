@@ -14,5 +14,4 @@ It was developed in Kotlin with MVVM pattern and using the following libraries:
 - ViewBinding
 - Insert Koin
 - Kotlin Coroutines
-
 <br>
