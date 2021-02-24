@@ -67,7 +67,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
 
     private fun doLogin() {
         hideKeyboard()
-        mBinding.imgLogo.tint(android.R.color.holo_red_dark)
         viewModel.doLogin(mBinding.includeField.edtEmail.text.toString(),
                 mBinding.includeField.edtPassword.text.toString())
     }

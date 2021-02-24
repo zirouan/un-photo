@@ -6,6 +6,7 @@ import com.zirouan.unphoto.screen.photo.model.Photo
 import com.zirouan.unphoto.util.exception.ExceptionHelper
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
